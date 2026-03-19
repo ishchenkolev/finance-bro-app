@@ -1,0 +1,21 @@
+{
+    "name": "Finance Bro",
+    "short_name": "FinBro",
+    "description": "Твой личный финансовый помощник",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#FDFCFE",
+    "theme_color": "#8E84D0",
+    "icons": [
+        {
+            "src": "/static/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
