@@ -50,11 +50,13 @@ async def get_loans():
     loans = database.get_loans()
     result = []
     for l in loans:
-        total_debt = (l[4] or 0) + (l[7] or 0)
-        current_debt = l[8] or 0
-        if total_debt > 0:
-            paid = total_debt - current_debt
-            progress = (paid / total_debt) * 100
+        total_amount = l[4] or 0  # Берем только общую сумму кредита (без переплаты)
+        current_debt = l[8] or 0  # Задолженность на сегодня
+        
+        if total_amount > 0:
+            # Высчитываем, сколько реально закрыто от основного долга
+            paid_body = max(0, total_amount - current_debt)
+            progress = (paid_body / total_amount) * 100
         else:
             progress = 0
             
