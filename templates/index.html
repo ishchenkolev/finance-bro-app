@@ -44,6 +44,39 @@
             <!-- Dashboard Screen -->
             <section id="dashboard" class="screen active">
                 <h1 class="screen-title">Дашборд</h1>
+                
+                <div id="dashboard-summary" class="summary-container">
+                    <!-- Shield Block -->
+                    <div class="glass-card summary-card shield">
+                        <div class="card-header">
+                            <i class="fas fa-shield-halved"></i>
+                            <span>Оборона (Зарплата)</span>
+                        </div>
+                        <div class="summary-value">
+                            <span id="shield-current">0</span> <span class="goal">/ <span id="shield-goal">0</span> ₸</span>
+                        </div>
+                        <div class="progress-track">
+                            <div id="shield-progress" class="progress-fill bg-blue" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sword Block -->
+                    <div class="glass-card summary-card sword">
+                        <div class="card-header">
+                            <i class="fas fa-sword"></i>
+                            <span>Для досрочного погашения (Проекты)</span>
+                        </div>
+                        <div class="summary-value accent">
+                            <span id="sword-current">0</span> ₸
+                        </div>
+                        <button class="primary-btn sword-btn" disabled>🎯 Направить в цель</button>
+                    </div>
+                </div>
+
+                <button id="open-add-income" class="primary-btn dashboard-action-btn">
+                    <i class="fas fa-plus-circle"></i> Добавить доход
+                </button>
+
                 <div class="glass-card">
                     <h3>Рассчитать прогноз</h3>
                     <div class="input-group">
@@ -88,13 +121,23 @@
                 <h1 class="screen-title">Настройки</h1>
                 <div class="glass-card">
                     <h3>Финансовые параметры</h3>
-                    <div class="input-group">
-                        <label>Стабильная зарплата (₸)</label>
-                        <input type="number" id="salary-input">
-                    </div>
-                    <div class="input-group">
-                        <label>Выходных в неделю</label>
-                        <input type="number" id="days-off-input">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Месячная зарплата (₸)</label>
+                            <input type="number" id="base-salary-input" placeholder="260000">
+                        </div>
+                        <div class="input-group">
+                            <label>Цель 'Щит' (₸/мес)</label>
+                            <input type="number" id="shield-goal-input" placeholder="242600">
+                        </div>
+                        <div class="input-group">
+                            <label>Ставка в день (₸)</label>
+                            <input type="number" id="salary-input" placeholder="Старая версия">
+                        </div>
+                        <div class="input-group">
+                            <label>Выходных в неделю</label>
+                            <input type="number" id="days-off-input">
+                        </div>
                     </div>
                     <button id="save-settings" class="primary-btn">Сохранить <i class="fas fa-check"></i></button>
                 </div>
@@ -150,6 +193,28 @@
                 <div class="modal-actions">
                     <button id="close-modal" class="text-btn">Отмена</button>
                     <button id="save-loan" class="primary-btn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Income Modal -->
+        <div id="income-modal" class="modal">
+            <div class="modal-content glass-card">
+                <h2>Новый доход</h2>
+                <div class="input-group">
+                    <label>Сумма (₸)</label>
+                    <input type="number" id="income-amount" placeholder="Например: 50000">
+                </div>
+                <div class="input-group">
+                    <label>Тип дохода</label>
+                    <select id="income-type" class="custom-select">
+                        <option value="base">🛡️ База / Зарплата</option>
+                        <option value="attack">⚔️ Атака / Доп. доход</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button id="close-income-modal" class="text-btn">Отмена</button>
+                    <button id="save-income" class="primary-btn">Сохранить</button>
                 </div>
             </div>
         </div>

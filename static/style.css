@@ -9,6 +9,10 @@
     --shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
     --radius: 24px;
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --blue: #4A90E2;
+    --green: #48BB78;
+    --shield-bg: rgba(74, 144, 226, 0.1);
+    --sword-bg: rgba(72, 187, 120, 0.1);
 }
 
 * {
@@ -90,6 +94,80 @@ body {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 }
 
+/* Summary Dashboard */
+.summary-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card.shield {
+    border-left: 4px solid var(--blue);
+}
+
+.summary-card.sword {
+    border-left: 4px solid var(--green);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, var(--sword-bg) 100%);
+}
+
+.summary-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.summary-card .card-header i {
+    font-size: 1.2rem;
+}
+
+.summary-card.shield i { color: var(--blue); }
+.summary-card.sword i { color: var(--green); }
+
+.summary-card .card-header span {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.summary-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.summary-value .goal {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.summary-value.accent {
+    color: var(--green);
+}
+
+.sword-btn {
+    margin-top: 15px;
+    background: var(--green);
+    padding: 12px;
+    font-size: 0.95rem;
+}
+
+.sword-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #a0aec0;
+}
+
+.bg-blue { background: var(--blue); }
+.bg-green { background: var(--green); }
+
 /* Progress Bar (Refined) */
 .progress-container {
     margin-top: 15px;
@@ -131,14 +209,10 @@ body {
 }
 
 .input-group label {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
     margin-left: 5px;
 }
 
-input {
+select, input {
     width: 100%;
     padding: 14px 18px;
     border-radius: 16px;
@@ -148,9 +222,20 @@ input {
     font-family: inherit;
     transition: var(--transition);
     outline: none;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
-input:focus {
+select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238E84D0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 18px;
+    padding-right: 45px;
+}
+
+input:focus, select:focus {
     border-color: var(--primary);
     background: #fff;
     box-shadow: 0 0 0 4px rgba(142, 132, 208, 0.1);
@@ -175,6 +260,12 @@ input:focus {
 
 .primary-btn:active {
     transform: scale(0.97);
+}
+
+.dashboard-action-btn {
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, var(--primary) 0%, #6A5ACD 100%);
+    box-shadow: 0 10px 25px rgba(142, 132, 208, 0.3);
 }
 
 .add-btn {

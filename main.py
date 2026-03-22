@@ -32,6 +32,13 @@ class Loan(BaseModel):
 class Settings(BaseModel):
     stable_salary: float
     days_off_per_week: int
+    base_salary: float = 260000.0
+    shield_goal: float = 242600.0
+
+class Income(BaseModel):
+    amount: float
+    date: str
+    income_type: str # 'base' or 'attack'
 
 class CalculateRequest(BaseModel):
     current_money: float
@@ -98,12 +105,62 @@ async def delete_loan(loan_id: int):
 @app.get("/api/settings")
 async def get_settings():
     s = database.get_settings()
-    return {"stable_salary": s[0], "days_off_per_week": s[1]}
+    return {
+        "stable_salary": s[0], 
+        "days_off_per_week": s[1],
+        "base_salary": s[2],
+        "shield_goal": s[3]
+    }
 
-@app.post("/api/settings")
+@app.put("/api/settings")
 async def update_settings(s: Settings):
-    database.update_settings(s.stable_salary, s.days_off_per_week)
+    database.update_settings(s.stable_salary, s.days_off_per_week, s.base_salary, s.shield_goal)
     return {"status": "success"}
+
+# Income Endpoints
+@app.get("/api/incomes")
+async def get_incomes():
+    incomes = database.get_incomes()
+    result = []
+    for i in incomes:
+        result.append({
+            "id": i[0],
+            "amount": i[1],
+            "date": i[2],
+            "income_type": i[3]
+        })
+    return result
+
+@app.post("/api/incomes")
+async def add_income(income: Income):
+    if income.income_type not in ['base', 'attack']:
+        raise HTTPException(status_code=400, detail="Invalid income type. Must be 'base' or 'attack'.")
+    database.add_income(income.amount, income.date, income.income_type)
+    return {"status": "success"}
+
+@app.put("/api/incomes/{income_id}")
+async def update_income(income_id: int, income: Income):
+    if income.income_type not in ['base', 'attack']:
+        raise HTTPException(status_code=400, detail="Invalid income type. Must be 'base' or 'attack'.")
+    database.update_income(income_id, income.amount, income.date, income.income_type)
+    return {"status": "success"}
+
+@app.delete("/api/incomes/{income_id}")
+async def delete_income(income_id: int):
+    database.delete_income(income_id)
+    return {"status": "success"}
+
+@app.get("/api/dashboard/summary")
+async def get_dashboard_summary():
+    s = database.get_settings()
+    shield_current, sword_current = database.get_monthly_summary()
+    
+    return {
+        "base_salary": s[2],
+        "shield_goal": s[3],
+        "shield_current": shield_current,
+        "sword_current": sword_current
+    }
 
 @app.post("/api/calculate")
 async def calculate(req: CalculateRequest):

@@ -16,10 +16,38 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(target).classList.add('active');
 
             // Load screen data
+            if (target === 'dashboard') loadDashboardSummary();
             if (target === 'loans') loadLoans();
             if (target === 'settings') loadSettings();
         });
     });
+
+    // Initial load
+    loadDashboardSummary();
+
+    async function loadDashboardSummary() {
+        try {
+            const res = await fetch('/api/dashboard/summary');
+            const data = await res.json();
+            
+            document.getElementById('shield-current').innerText = data.shield_current.toLocaleString();
+            document.getElementById('shield-goal').innerText = data.shield_goal.toLocaleString();
+            document.getElementById('sword-current').innerText = data.sword_current.toLocaleString();
+            
+            const shieldPercent = data.shield_goal > 0 
+                ? Math.min(100, (data.shield_current / data.shield_goal) * 100) 
+                : 0;
+            
+            const shieldProg = document.getElementById('shield-progress');
+            shieldProg.style.width = '0%';
+            setTimeout(() => {
+                shieldProg.style.width = `${shieldPercent}%`;
+            }, 100);
+            
+        } catch (err) {
+            console.error('Ошибка загрузки сводки:', err);
+        }
+    }
 
     // --- DASHBOARD (Calculation) ---
     const calcBtn = document.getElementById('calculate-btn');
@@ -210,20 +238,63 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
         document.getElementById('salary-input').value = data.stable_salary;
         document.getElementById('days-off-input').value = data.days_off_per_week;
+        document.getElementById('base-salary-input').value = data.base_salary;
+        document.getElementById('shield-goal-input').value = data.shield_goal;
     }
 
     saveSettingsBtn.addEventListener('click', async () => {
         const payload = {
-            stable_salary: parseFloat(document.getElementById('salary-input').value),
-            days_off_per_week: parseInt(document.getElementById('days-off-input').value)
+            stable_salary: parseFloat(document.getElementById('salary-input').value) || 0,
+            days_off_per_week: parseInt(document.getElementById('days-off-input').value) || 1,
+            base_salary: parseFloat(document.getElementById('base-salary-input').value) || 260000,
+            shield_goal: parseFloat(document.getElementById('shield-goal-input').value) || 242600
         };
 
         await fetch('/api/settings', {
-            method: 'POST',
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
         alert('Настройки сохранены! ✅');
+        loadDashboardSummary(); // Refresh dashboard with new goals
+    });
+
+    // --- INCOME MODAL ---
+    const incomeModal = document.getElementById('income-modal');
+    const openIncomeModalBtn = document.getElementById('open-add-income');
+    const closeIncomeModalBtn = document.getElementById('close-income-modal');
+    const saveIncomeBtn = document.getElementById('save-income');
+
+    openIncomeModalBtn.addEventListener('click', () => {
+        document.getElementById('income-amount').value = '';
+        incomeModal.classList.add('active');
+    });
+
+    closeIncomeModalBtn.addEventListener('click', () => incomeModal.classList.remove('active'));
+
+    saveIncomeBtn.addEventListener('click', async () => {
+        const amount = parseFloat(document.getElementById('income-amount').value);
+        const type = document.getElementById('income-type').value;
+        const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+        if (isNaN(amount) || amount <= 0) return alert('Бро, введи нормальную сумму!');
+
+        try {
+            const res = await fetch('/api/incomes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount, date, income_type: type })
+            });
+            
+            if (res.ok) {
+                incomeModal.classList.remove('active');
+                loadDashboardSummary();
+            } else {
+                alert('Ошибка при сохранении дохода');
+            }
+        } catch (err) {
+            console.error('Ошибка сохранения дохода:', err);
+        }
     });
 
     // --- CHAT (Assistant) ---
