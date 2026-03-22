@@ -1,0 +1,404 @@
+:root {
+    --primary: #8E84D0;
+    --primary-light: #A59DE0;
+    --bg-light: #F8F9FA;
+    --text-dark: #2D2D2D;
+    --text-secondary: #757575;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    --radius: 24px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(135deg, #FDFCFE 0%, #F5F3FF 100%);
+    color: var(--text-dark);
+    line-height: 1.6;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    background: transparent;
+}
+
+/* Header & Screens */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: 100px; /* Space for nav */
+}
+
+.screen {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.screen-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: var(--text-dark);
+}
+
+.screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    transition: var(--transition);
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Progress Bar (Refined) */
+.progress-container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+.progress-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s ease-in-out, background-color 0.5s ease;
+}
+
+.bg-low { background: #8E84D0; }
+.bg-medium { background: #6A5ACD; }
+.bg-high { background: #81C784; }
+
+/* UI Elements */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    margin-left: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(142, 132, 208, 0.2);
+    background: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition);
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(142, 132, 208, 0.1);
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 18px;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.primary-btn:active {
+    transform: scale(0.97);
+}
+
+.add-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(142, 132, 208, 0.4);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+/* Bottom Nav */
+.bottom-nav {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 460px;
+    margin: 0 auto;
+    height: 75px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    gap: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    flex: 1;
+}
+
+.nav-item i {
+    font-size: 1.4rem;
+}
+
+.nav-item span {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    margin: 20px 0;
+}
+
+/* List Items */
+.loan-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.loan-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 14px;
+    background: rgba(142, 132, 208, 0.1);
+    color: var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.loan-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(142, 132, 208, 0.1);
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.action-btn:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+.action-btn.delete-btn {
+    color: #FF6B6B;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.action-btn.delete-btn:hover {
+    background: #FF6B6B;
+    color: #fff;
+}
+
+/* Chat */
+.chat-messages {
+    height: 350px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    max-width: 85%;
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    animation: fadeIn 0.3s ease;
+}
+
+.message.bot {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--text-dark);
+    border-bottom-left-radius: 4px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+.message.user {
+    align-self: flex-end;
+    background: var(--primary);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 0;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.text-btn {
+    border: none; background: none; color: var(--text-secondary); font-weight: 600; cursor: pointer;
+}
+
+.hidden { display: none !important; }
+
+/* Scrollbar UI */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Bro — Твой финансовый помощник</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#8E84D0">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/static/sw.js');
+        });
+      }
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-screen="dashboard">
+                <i class="fas fa-th-large"></i>
+                <span>Дашборд</span>
+            </button>
+            <button class="nav-item" data-screen="loans">
+                <i class="fas fa-credit-card"></i>
+                <span>Кредиты</span>
+            </button>
+            <button class="nav-item" data-screen="assistant">
+                <i class="fas fa-robot"></i>
+                <span>Бро-ИИ</span>
+            </button>
+            <button class="nav-item" data-screen="settings">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </button>
+        </nav>
+
+        <!-- Screens -->
+        <main class="content">
+            <!-- Dashboard Screen -->
+            <section id="dashboard" class="screen active">
+                <h1 class="screen-title">Дашборд</h1>
+                <div class="glass-card">
+                    <h3>Рассчитать прогноз</h3>
+                    <div class="input-group">
+                        <label>Сколько денег сейчас по факту?</label>
+                        <input type="number" id="current-balance" placeholder="Например: 150000">
+                    </div>
+                    <button id="calculate-btn" class="primary-btn">Рассчитать <i class="fas fa-arrow-right"></i></button>
+                </div>
+                <div id="forecast-result" class="glass-card hidden">
+                    <!-- Results will be injected here -->
+                </div>
+            </section>
+
+            <!-- Loans Screen -->
+            <section id="loans" class="screen">
+                <div class="screen-header">
+                    <h1 class="screen-title">Кредиты</h1>
+                    <button id="open-add-loan" class="add-btn"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="loans-list" class="list-container">
+                    <!-- Loans will be injected here -->
+                </div>
+            </section>
+
+            <!-- Assistant Screen -->
+            <section id="assistant" class="screen">
+                <h1 class="screen-title">Бро-Ассистент 🧔‍♂️</h1>
+                <div class="chat-container glass-card">
+                    <div id="chat-messages" class="chat-messages">
+                        <div class="message bot">Привет! Я твой финансовый бро. Расскажу, сколько можно потратить, чтобы не уйти в минус. 🤜🤛</div>
+                    </div>
+                    <div id="chat-loader" class="loader hidden"></div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="Спроси: 'Тусовка 15000'...">
+                        <button id="send-chat" class="icon-btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Screen -->
+            <section id="settings" class="screen">
+                <h1 class="screen-title">Настройки</h1>
+                <div class="glass-card">
+                    <h3>Финансовые параметры</h3>
+                    <div class="input-group">
+                        <label>Стабильная зарплата (₸)</label>
+                        <input type="number" id="salary-input">
+                    </div>
+                    <div class="input-group">
+                        <label>Выходных в неделю</label>
+                        <input type="number" id="days-off-input">
+                    </div>
+                    <button id="save-settings" class="primary-btn">Сохранить <i class="fas fa-check"></i></button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modals -->
+        <div id="loan-modal" class="modal">
+            <div class="modal-content glass-card">
+                <h2 id="modal-title">Новый кредит</h2>
+                <input type="hidden" id="edit-loan-id">
+                
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Название</label>
+                        <input type="text" id="loan-title" placeholder="Напр: Ипотека">
+                    </div>
+                    <div class="input-group">
+                        <label>Месячный платеж (₸)</label>
+                        <input type="number" id="loan-amount">
+                    </div>
+                    <div class="input-group">
+                        <label>День платежа (число)</label>
+                        <input type="number" id="loan-date" min="1" max="31">
+                    </div>
+                </div>
+
+                <hr class="modal-divider">
+
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Общая сумма (₸)</label>
+                        <input type="number" id="loan-total-amount">
+                    </div>
+                    <div class="input-group">
+                        <label>Дата получения</label>
+                        <input type="date" id="loan-issue-date">
+                    </div>
+                    <div class="input-group">
+                        <label>Срок (мес)</label>
+                        <input type="number" id="loan-term">
+                    </div>
+                    <div class="input-group">
+                        <label>Переплата (₸)</label>
+                        <input type="number" id="loan-overpayment">
+                    </div>
+                    <div class="input-group">
+                        <label>Текущий долг (₸)</label>
+                        <input type="number" id="loan-current-debt">
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button id="close-modal" class="text-btn">Отмена</button>
+                    <button id="save-loan" class="primary-btn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/script.js?v=1.2"></script>
+</body>
+</html>
